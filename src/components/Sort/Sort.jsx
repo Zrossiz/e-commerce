@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Sort = () => {
+  const settings = ["популярности", "цене", "алфавиту"];
+  const [showPopup, setShowPopup] = useState(false);
+  const [setting, setSetting] = useState(0);
+  const changeSetting = (index) => {
+    setSetting(index);
+    setShowPopup(false);
+  };
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,15 +24,29 @@ const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span
+          onClick={() => {
+            setShowPopup(!showPopup);
+          }}
+        >
+          {settings[setting]}
+        </span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {showPopup && (
+        <div className="sort__popup">
+          <ul>
+            {settings.map((item, index) => (
+              <li
+                onClick={() => changeSetting(index)}
+                key={index}
+                className={index === setting ? "active" : ""}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

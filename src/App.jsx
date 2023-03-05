@@ -5,6 +5,8 @@ import Sort from "./components/Sort/Sort";
 
 import "./scss/app.scss";
 
+import pizzas from "./assets/pizzas.json";
+
 function App() {
   return (
     <div className="App">
@@ -13,12 +15,23 @@ function App() {
         <div className="content">
           <div className="container">
             <div className="content__top">
-              <Categories />
+              {/*<Categories />*/}
               <Sort />
             </div>
             <h2 className="content__title">Все пиццы</h2>
             <div className="content__items">
-              <PizzaBlock title={"Заебись пицца"} price={200} />
+              {pizzas.map((item, index) => {
+                return (
+                  <PizzaBlock
+                    key={index}
+                    imgUrl={item.imageUrl}
+                    title={item.title}
+                    price={item.price}
+                    sizes={item.sizes}
+                    width={item.types}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
