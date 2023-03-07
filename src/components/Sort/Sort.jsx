@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 
-const Sort = () => {
-  const settings = ["популярности", "цене", "алфавиту"];
+const Sort = ({ value, sortType }) => {
+  const settings = [
+    { name: "популярности", sortProperty: "rating" },
+    { name: "цене", sortProperty: "price" },
+    { name: "алфавиту", sortProperty: "title" },
+  ];
   const [showPopup, setShowPopup] = useState(false);
   const [setting, setSetting] = useState(0);
   const changeSetting = (index) => {
-    setSetting(index);
+    value(index);
     setShowPopup(false);
   };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -29,7 +34,7 @@ const Sort = () => {
             setShowPopup(!showPopup);
           }}
         >
-          {settings[setting]}
+          {sortType.name}
         </span>
       </div>
       {showPopup && (
@@ -37,11 +42,13 @@ const Sort = () => {
           <ul>
             {settings.map((item, index) => (
               <li
-                onClick={() => changeSetting(index)}
+                onClick={() => changeSetting(item)}
                 key={index}
-                className={index === setting ? "active" : ""}
+                className={
+                  value.sortProperty === item.sortProperty ? "active" : ""
+                }
               >
-                {item}
+                {item.name}
               </li>
             ))}
           </ul>
