@@ -3,8 +3,9 @@ import Categories from "../components/Categories/Categories";
 import Sort from "../components/Sort/Sort";
 import MyLoader from "../components/PizzaBlock/Loader";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
+import Search from "../components/Search/Search";
 
-function Home(props) {
+function Home({ searchValue }) {
   const [data, setData] = useState([]);
   const [categoryId, setCategoryId] = useState(0);
   const [sortType, setSortType] = useState({
@@ -34,6 +35,23 @@ function Home(props) {
     window.scrollTo(0, 0);
   }, [categoryId, sortType]);
 
+  const pizzas = data
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
+    )
+    .map((item, index) => (
+      <PizzaBlock
+        key={index}
+        imgUrl={item.imageUrl}
+        title={item.title}
+        price={item.price}
+        sizes={item.sizes}
+        width={item.types}
+      />
+    ));
+
+  const loader = loaderArr.map((item, index) => <MyLoader key={index} />);
+
   return (
     <div className="container">
       <div className="content__top">
@@ -44,20 +62,7 @@ function Home(props) {
         <Sort sortType={sortType} value={(i) => onChangeSort(i)} />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {isLoading
-          ? loaderArr.map((item, index) => <MyLoader key={index} />)
-          : data.map((item, index) => (
-              <PizzaBlock
-                key={index}
-                imgUrl={item.imageUrl}
-                title={item.title}
-                price={item.price}
-                sizes={item.sizes}
-                width={item.types}
-              />
-            ))}
-      </div>
+      <div className="content__items">{isLoading ? loader : pizzas}</div>
     </div>
   );
 }
