@@ -3,10 +3,11 @@ import Categories from "../components/Categories/Categories";
 import Sort from "../components/Sort/Sort";
 import MyLoader from "../components/PizzaBlock/Loader";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
-import Search from "../components/Search/Search";
+import Pagination from "../components/Pagination/Pagination";
 
 function Home({ searchValue }) {
   const [data, setData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [categoryId, setCategoryId] = useState(0);
   const [sortType, setSortType] = useState({
     name: "популярности",
@@ -14,7 +15,7 @@ function Home({ searchValue }) {
   });
   const [isLoading, setIsLoading] = useState(false);
   const loaderArr = [1, 2, 3, 4, 5, 6];
-  const urlData = `https://6404dedfeed195a99f77c27d.mockapi.io/items?${
+  const urlData = `https://6404dedfeed195a99f77c27d.mockapi.io/items?page=${currentPage}&limit=4&${
     categoryId > 0 ? `category=${categoryId}` : ""
   }&sortBy=${sortType.sortProperty}&order=desc`;
 
@@ -33,7 +34,7 @@ function Home({ searchValue }) {
       .then((json) => setData(json))
       .then(() => setIsLoading(false));
     window.scrollTo(0, 0);
-  }, [categoryId, sortType]);
+  }, [categoryId, sortType, currentPage]);
 
   const pizzas = data
     .filter((item) =>
@@ -63,6 +64,7 @@ function Home({ searchValue }) {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{isLoading ? loader : pizzas}</div>
+      <Pagination onChangePage={(number) => setCurrentPage(number)} />
     </div>
   );
 }
