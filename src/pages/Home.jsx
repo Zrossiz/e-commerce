@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Categories from "../components/Categories/Categories";
 import Sort from "../components/Sort/Sort";
 import MyLoader from "../components/PizzaBlock/Loader";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import Pagination from "../components/Pagination/Pagination";
-
-function Home({ searchValue }) {
+import { SearchContext } from "../App";
+function Home() {
+  const { searchValue } = useContext(SearchContext);
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [categoryId, setCategoryId] = useState(0);
