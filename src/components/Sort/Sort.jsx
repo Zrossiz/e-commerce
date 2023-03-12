@@ -7,7 +7,6 @@ const Sort = ({ value, sortType }) => {
     { name: "алфавиту", sortProperty: "title" },
   ];
   const [showPopup, setShowPopup] = useState(false);
-  const [setting, setSetting] = useState(0);
   const changeSetting = (index) => {
     value(index);
     setShowPopup(false);

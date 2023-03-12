@@ -1,23 +1,30 @@
-import React, { useContext, useEffect, useState } from "react";
 import Categories from "../components/Categories/Categories";
 import Sort from "../components/Sort/Sort";
 import MyLoader from "../components/PizzaBlock/Loader";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import Pagination from "../components/Pagination/Pagination";
+
+import React, { useContext, useEffect, useState } from "react";
 import { SearchContext } from "../App";
 import { useSelector, useDispatch } from "react-redux";
-import { setCategoryId, setSortType } from "../redux/slices/filterSlice";
+import {
+  setCategoryId,
+  setSortType,
+  setPageCount,
+} from "../redux/slices/filterSlice";
+import axios from "axios";
+
 function Home() {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortType = useSelector((state) => state.filter.sort);
+  const pageCount = useSelector((state) => state.filter.pageCount);
   const dispatch = useDispatch();
   const { searchValue } = useContext(SearchContext);
   const [data, setData] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const loaderArr = [1, 2, 3, 4, 5, 6];
-  const urlData = `https://6404dedfeed195a99f77c27d.mockapi.io/items?page=${currentPage}&limit=4&${
+  const [isLoading, setLoading] = useState(false);
+  const loaderArr = [1, 2, 3, 4];
+  const urlData = `https://6404dedfeed195a99f77c27d.mockapi.io/items?page=${pageCount}&limit=4&${
     categoryId > 0 ? `category=${categoryId}` : ""
   }&sortBy=${sortType.sortProperty}&order=desc`;
 
@@ -29,14 +36,19 @@ function Home() {
     dispatch(setSortType(index));
   };
 
+  const onChangePage = (index) => {
+    dispatch(setPageCount(index));
+  };
+
   useEffect(() => {
-    setIsLoading(true);
-    fetch(urlData)
-      .then((res) => res.json())
-      .then((json) => setData(json))
-      .then(() => setIsLoading(false));
+    setLoading(true);
+    axios.get(urlData).then((res) => {
+      setData(res.data);
+      setLoading(false);
+    });
+
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, currentPage, urlData]);
+  }, [categoryId, sortType, pageCount, urlData]);
 
   const pizzas = data
     .filter((item) =>
@@ -66,7 +78,7 @@ function Home() {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">{isLoading ? loader : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination onChangePage={(number) => onChangePage(number)} />
     </div>
   );
 }
