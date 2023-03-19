@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from "react";
-import { SearchContext } from "../../App";
+import { SearchContext } from "../../App.jsx";
 import styles from "./Search.module.scss";
 import debounce from "lodash.debounce";
 import { useState } from "react";

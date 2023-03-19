@@ -5,7 +5,7 @@ import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import Pagination from "../components/Pagination/Pagination";
 
 import React, { useContext, useEffect, useState } from "react";
-import { SearchContext } from "../App";
+import { SearchContext } from "../App.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setCategoryId,
@@ -62,6 +62,7 @@ function Home() {
         price={item.price}
         sizes={item.sizes}
         width={item.types}
+        id={item.id}
       />
     ));
 
